@@ -158,7 +158,7 @@ namespace The_Rotting
                     if (CheckCollision(bulletBounds, zombieBounds))
                     {
                         // Наносим урон зомби
-                        zombie.Health -= bullet.BulletDamage;
+                        zombie.GetDamage(bullet.BulletDamage);
 
                         // Удаляем пулю
                         player.Bullets.RemoveAt(i);
