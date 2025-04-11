@@ -34,7 +34,6 @@ namespace The_Rotting
         private const float damageBlinkDuration = 0.05f; // Продолжительность моргания (в секундах)
         private Color damageColor = Color.Red; // Цвет для моргания
 
-        Color zombieColor = Color.White;
 
         public Zombie(Vector2 position, Texture2D walkTexture, Player player)
         {

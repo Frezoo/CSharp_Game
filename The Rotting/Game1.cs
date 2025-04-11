@@ -69,7 +69,7 @@ namespace The_Rotting
 
 
 
-            zombieSpawner = new ZombieSpawner(_zombieWalkTexture, 1, player);
+            zombieSpawner = new ZombieSpawner(_zombieWalkTexture, 11, player);
 
             LoadFonts();
             SetOrigins();
