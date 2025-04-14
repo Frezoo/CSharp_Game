@@ -15,15 +15,16 @@ namespace The_Rotting
         public float Scale = 0.372f;
         public Vector2 Origin;
         private int frame;
-        public float Speed; // Скорость теперь не константа
+        public float Speed; // Скорость 
         public float Damage = 0.1f; // Урон, наносимый игроку
         public float Health = 1f; // Здоровье врага
         public bool IsAlive = true; // Проверка, жив ли враг
         private Player _player; // Ссылка на игрока
-                                //
+                            
         private float _frameTime = 0.03f; // Время между кадрами (в секундах)
         private float _timeSinceLastFrame = 0f; // Время с последнего кадра
         const float distanceToUpdateRotation = 30;
+        private float distanceToPlayer;
 
         private float fadeAlpha = 1f; // Уровень прозрачности (1f = полностью видимый, 0f = полностью прозрачный)
         private bool isFading = false; // Флаг для отслеживания состояния затухания
@@ -33,6 +34,10 @@ namespace The_Rotting
         private float damageBlinkTimer = 0f; // Таймер для эффекта моргания
         private const float damageBlinkDuration = 0.05f; // Продолжительность моргания (в секундах)
         private Color damageColor = Color.Red; // Цвет для моргания
+
+        const float radiusOfSoftRepulsion = 100;
+        const float minimumDistanceBetweenZombies = 40;
+        const float distanceToAttack = 3;
 
 
         public Zombie(Vector2 position, Texture2D walkTexture, Player player)
@@ -54,7 +59,7 @@ namespace The_Rotting
         {
             // Вычисляем направление к игроку
             Vector2 direction = _player.Position - Position;
-            float distanceToPlayer = direction.Length();
+            distanceToPlayer = direction.Length();
 
             // Нормализуем вектор направления
             if (direction != Vector2.Zero)
@@ -76,7 +81,7 @@ namespace The_Rotting
                     float distanceToOtherZombie = Vector2.Distance(Position, otherZombie.Position);
 
                     // Мягкое отталкивание на большом расстоянии
-                    if (distanceToOtherZombie < 100f) // 150f — радиус мягкого отталкивания
+                    if (distanceToOtherZombie < radiusOfSoftRepulsion) 
                     {
                         Vector2 repulsionDirection = Position - otherZombie.Position;
                         repulsionDirection.Normalize();
@@ -84,7 +89,7 @@ namespace The_Rotting
                     }
 
                     // Сильное отталкивание при близком контакте
-                    if (distanceToOtherZombie < 40f) // 70f — минимальное расстояние между зомби
+                    if (distanceToOtherZombie < minimumDistanceBetweenZombies) 
                     {
                         Vector2 strongRepulsionDirection = Position - otherZombie.Position;
                         strongRepulsionDirection.Normalize();
@@ -99,8 +104,17 @@ namespace The_Rotting
             // Обновляем позицию зомби
             Position += direction * Speed * deltaTime;
 
-            // Проверяем столкновение с игроком
 
+            
+
+        }
+
+        public void Attack()
+        {
+            if (distanceToPlayer <= distanceToAttack)
+            {
+                _player.ChangeHealth(Damage);
+            }
         }
 
         public void Update(float deltaTime, List<Zombie> zombies)
@@ -145,6 +159,7 @@ namespace The_Rotting
                 }
 
                 MoveToPlayer(deltaTime, zombies);
+                Attack();
             }
         }
 

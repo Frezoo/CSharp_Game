@@ -9,6 +9,7 @@ namespace The_Rotting
 {
     public class Game1 : Game
     {
+        
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Texture2D _crosshair;
@@ -69,7 +70,7 @@ namespace The_Rotting
 
 
 
-            zombieSpawner = new ZombieSpawner(_zombieWalkTexture, 11, player);
+            zombieSpawner = new ZombieSpawner(_zombieWalkTexture, player);
 
             LoadFonts();
             SetOrigins();
@@ -101,7 +102,7 @@ namespace The_Rotting
             inputHandler.HandleKeyboardInput(keyboardState);
             inputHandler.HandleMouseInput(mouseState);
 
-            zombieSpawner.SpawnEnemies();
+            zombieSpawner.Update();
 
             UpdatePlayerStatus(deltaTime);
             SpawnAmmoBox(deltaTime);
@@ -112,7 +113,6 @@ namespace The_Rotting
             {
                 zombie.Update(deltaTime, zombieSpawner.Zombies);
             }
-            zombieSpawner.Zombies = zombieSpawner.Zombies.Where(z => z.IsAlive).ToList();
             
 
             base.Update(gameTime);
